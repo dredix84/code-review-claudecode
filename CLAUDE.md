@@ -6,6 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This directory contains code review documentation conducted using ClaudeCode CLI. This is NOT a software development project - it's a structured repository for storing code review artifacts and findings.
 
+## Important
+- Do not post comments to the any merge request unless told to do so.
+- The project name is based on the git repo, example:
+  - `http://services.conexusnuclear.org:8929/candu/bms-helper/-/merge_requests/281` would be `bms-helper`
+  - `http://services.conexusnuclear.org:8929/candu/bms/-/merge_requests/281` would be `bms`
+
 ## Directory Structure
 
 Reviews are organized hierarchically:
@@ -13,8 +19,7 @@ Reviews are organized hierarchically:
 ```
 /[PROJECT NAME]/
     /[MERGE REQUEST ID]/
-        - review-notes.md
-        - findings.md
+        - review-notes-[increment].md
         - other review artifacts
     /more_mr_info.md  (optional project-specific instructions)
 ```
@@ -39,13 +44,14 @@ When conducting a code review in this directory:
    - Documentation completeness
 
 4. **Document Findings**: Create review artifacts in the MR folder:
-   - `review-notes.md` - Detailed review notes
-   - `findings.md` - Summary of issues and recommendations
+   - `review-notes-[increment].md` - Detailed review notes and recommendations
    - Additional files as needed for specific findings
 
 5. **Add Comments**: Use GitLab MCP tools to add comments directly to the MR:
    - `mcp__gitlab-mcp-code-review__add_merge_request_comment`
    - `mcp__gitlab-mcp-code-review__approve_merge_request` or `unapprove_merge_request`
+
+For additional general instruction for all code reviews, please see `reviewing.md`.
 
 ## Project-Specific Instructions
 
@@ -54,3 +60,6 @@ Check for `more_mr_info.md` in the project root directory for additional context
 ## GitLab Integration
 
 This workspace has GitLab MCP servers configured for both code review and issue management. Use these tools to fetch MRs, view diffs, compare versions, and interact with GitLab directly from the review process.
+
+
+
