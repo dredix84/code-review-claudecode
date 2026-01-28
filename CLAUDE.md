@@ -8,6 +8,8 @@ This directory contains code review documentation conducted using ClaudeCode CLI
 
 ## Important
 - Do not post comments to the any merge request unless told to do so.
+- Use the MCP to get the diff and do not diff directly from the filesystem.
+- Your code review should concentrate mainly on the diff and not an overall review of the file you an looking at. Reduce noise in the reviews. For ouce outside the diff, only when something is considered critical or a breaking change should you mention it in your notes. Reduce you noise and contentrate mostly on the diff.
 - The project name is based on the git repo, example:
   - `http://services.conexusnuclear.org:8929/candu/bms-helper/-/merge_requests/281` would be `bms-helper`
   - `http://services.conexusnuclear.org:8929/candu/bms/-/merge_requests/281` would be `bms`
@@ -17,20 +19,42 @@ This directory contains code review documentation conducted using ClaudeCode CLI
 Reviews are organized hierarchically:
 
 ```
-/[PROJECT NAME]/
-    /[MERGE REQUEST ID]/
-        - review-notes-[increment].md
-        - other review artifacts
-    /more_mr_info.md  (optional project-specific instructions)
+/codebase              # Local clones of project repositories for full codebase access
+   /[PROJECT NAME]/    # Git repository cloned from GitLab
+
+/reviews
+   /[PROJECT NAME]/
+      /[MERGE REQUEST ID]/
+         - review-notes-[increment].md
+         - review-notes-2.md
+         - review-notes-3.md
+         - other review artifacts
+      /more_mr_info.md  (optional project-specific instructions)
 ```
+When `review-notes-2.md` would be the second review and `review-notes-3.md` would be the third review, and so on.
 
 ## Code Review Workflow
 
 When conducting a code review in this directory:
 
-1. **Create Project Structure**: If the project folder doesn't exist, create it: `mkdir -p "[PROJECT NAME]/[MR_ID]"`
+1. **Create Project Structure**: If the project folder doesn't exist, create it: `mkdir -p "reviews/[PROJECT NAME]/[MR_ID]"`
 
-2. **Fetch Merge Request**: Use the GitLab MCP tools to fetch the merge request:
+2. **Setup/Update Local Codebase**: Before reviewing, ensure you have access to the full codebase:
+   - Check if the project exists in `./codebase/[PROJECT NAME]`
+   - If the folder doesn't exist, clone the repository:
+     ```bash
+     git clone 
+     git clone ssh://git@services.conexusnuclear.org:2224/[GROUP]/[PROJECT].git codebase/[PROJECT NAME]
+     ```
+   - Navigate to the codebase folder: `cd codebase/[PROJECT NAME]`
+   - Fetch the latest changes: `git fetch -p`
+   - Determine the source branch from the merge request
+   - Checkout the source branch: `git checkout [SOURCE_BRANCH]` or `git checkout [COMMIT_SHA]`
+   - Also ensure you are on the right branch before going further.
+   - Pull latest changes: `git pull`
+   - Return to the reviews directory when ready: `cd ../..`
+
+3. **Fetch Merge Request**: Use the GitLab MCP tools to fetch the merge request:
    - `mcp__gitlab-mcp-code-review__fetch_merge_request` - Get MR details
    - `mcp__gitlab-mcp-code-review__fetch_merge_request_diff` - Get code diffs
    - `mcp__gitlab-mcp-code-review__get_project_merge_requests` - List MRs
@@ -56,6 +80,9 @@ For additional general instruction for all code reviews, please see `reviewing.m
 ## Project-Specific Instructions
 
 Check for `more_mr_info.md` in the project root directory for additional context, coding standards, or review focus areas specific to that project.
+
+## Posting Comments
+- No fluff in the title, just the short description. Nothing  like "Code Review Comment: ..." or  "2. ..."
 
 ## GitLab Integration
 

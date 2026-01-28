@@ -7,20 +7,42 @@ This directory contains code review documentation conducted using ClaudeCode CLI
 Reviews are organized in the following directory structure:
 
 ```
-/[PROJECT NAME]/[merge request id]/
+/codebase/[PROJECT NAME]/     # Local clones of project repositories
+/reviews/[PROJECT NAME]/[merge request id]/
 ```
+
+### Codebase Folder
+
+The `codebase` folder contains local clones of project repositories, allowing for full codebase access during reviews. This enables better context understanding and more comprehensive code reviews.
 
 Additional instructions specific to the project should be stored at the root of the project folder:
 
 ```
-/[PROJECT NAME]/more_mr_info.md
+/reviews/[PROJECT NAME]/more_mr_info.md
 ```
 
 ## Usage
 
-1. Create a folder for your project if it doesn't exist
-2. Create a subfolder using the merge request ID
-3. Store all code review artifacts and documentation within that folder
+### Starting a Code Review
+
+1. **Setup Codebase** (if not already done):
+   - Check if `./codebase/[PROJECT NAME]` exists
+   - If not, clone the repository:
+     ```bash
+     git clone ssh://git@services.conexusnuclear.org:2224/[GROUP]/[PROJECT].git codebase/[PROJECT NAME]
+     ```
+   - Navigate to the codebase and fetch the specific branch:
+     ```bash
+     cd codebase/[PROJECT NAME]
+     git fetch -p
+     git checkout [SOURCE_BRANCH]  # or specific commit SHA
+     git pull
+     cd ../..
+     ```
+
+2. **Create Review Folder**:
+   - Create a folder for your project if it doesn't exist: `mkdir -p "reviews/[PROJECT NAME]/[MR_ID]"`
+   - Store all code review artifacts and documentation within that folder
 4. The number before the `.md` is the increment indicating that this is the first, second, third, etc review that was done. The increment used in the file name is created after each code review and a check should be done in the destination folder for to determine what the next increment.
   - `review-notes-1.md` would be the firt review.
   - `review-notes-2.md` would be the second review attempt
@@ -28,12 +50,13 @@ Additional instructions specific to the project should be stored at the root of 
 ## Example
 
 ```
-/my-application/
-    /123/
-        - review-notes-1.md
-        - review-notes-2.md
-    /124/
-        - review-notes-1.md
+/reviews
+    /my-application/
+        /123/
+            - review-notes-1.md
+            - review-notes-2.md
+        /124/
+            - review-notes-1.md
 ```
 
 ## Guidelines
