@@ -84,6 +84,28 @@ Check for `more_mr_info.md` in the project root directory for additional context
 ## Posting Comments
 - No fluff in the title, just the short description. Nothing  like "Code Review Comment: ..." or  "2. ..."
 
+## Ensemble Review Workflow (Multi-Agent)
+
+For more thorough reviews, use the ensemble workflow which runs 4 agents in parallel:
+
+- **Security Agent** - Focuses on vulnerabilities, OWASP, injection attacks
+- **Logic Agent** - Focuses on correctness, edge cases, error handling
+- **Quality Agent** - Focuses on code quality, performance, maintainability
+- **General Agent** - Holistic review, no specialization, catches cross-cutting issues
+
+**To run an ensemble review:**
+```
+Run ensemble review for [MR_URL]
+```
+
+The workflow:
+1. Runs 4 agents in parallel, each writing to `agent-*.md` files
+2. A synthesis agent combines findings into the final `review-notes-[N].md`
+3. Consensus findings (2+ agents) are higher confidence
+
+See `workflow/ensemble-review.md` for full documentation.
+See `workflow/run-ensemble.md` for execution instructions.
+
 ## GitLab Integration
 
 This workspace has GitLab MCP servers configured for both code review and issue management. Use these tools to fetch MRs, view diffs, compare versions, and interact with GitLab directly from the review process.
