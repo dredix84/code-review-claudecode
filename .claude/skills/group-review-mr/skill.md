@@ -89,7 +89,7 @@ Include in each agent's prompt:
 - **Description:** [MR description]
 
 # Project-Specific Guidelines
-[Content from reviews/[PROJECT]/more_mr_info.md if it exists]
+[Content from project-instructions/[PROJECT].md if it exists]
 
 # General Review Guidelines
 [Content from reviewing.md]
@@ -150,5 +150,5 @@ Present the final synthesized review to the user, including:
 - Wait for all 4 to complete before running synthesis
 - Focus on the DIFF. The entire file and the rest of the codebase is there to gain a better understand in relation to the diff
 - Only flag issues outside the diff if Critical/Major severity
-- Check for `more_mr_info.md` in the project folder for project-specific guidelines
+- Check for `project-instructions/[PROJECT].md` for project-specific guidelines
 - Follow CLAUDE.md and reviewing.md for general review practices

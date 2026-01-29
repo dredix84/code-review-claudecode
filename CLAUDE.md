@@ -22,6 +22,9 @@ Reviews are organized hierarchically:
 /codebase              # Local clones of project repositories for full codebase access
    /[PROJECT NAME]/    # Git repository cloned from GitLab
 
+/project-instructions  # Project-specific review guidelines
+   /[PROJECT NAME].md  # Optional additional context for this project
+
 /reviews
    /[PROJECT NAME]/
       /[MERGE REQUEST ID]/
@@ -29,7 +32,6 @@ Reviews are organized hierarchically:
          - review-notes-2.md
          - review-notes-3.md
          - other review artifacts
-      /more_mr_info.md  (optional project-specific instructions)
 ```
 When `review-notes-2.md` would be the second review and `review-notes-3.md` would be the third review, and so on.
 
@@ -79,7 +81,7 @@ For additional general instruction for all code reviews, please see `reviewing.m
 
 ## Project-Specific Instructions
 
-Check for `more_mr_info.md` in the project root directory for additional context, coding standards, or review focus areas specific to that project.
+Check for `project-instructions/[PROJECT NAME].md` for additional context, coding standards, or review focus areas specific to that project.
 
 ## Posting Comments
 - No fluff in the title, just the short description. Nothing  like "Code Review Comment: ..." or  "2. ..."

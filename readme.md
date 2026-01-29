@@ -15,10 +15,10 @@ Reviews are organized in the following directory structure:
 
 The `codebase` folder contains local clones of project repositories, allowing for full codebase access during reviews. This enables better context understanding and more comprehensive code reviews.
 
-Additional instructions specific to the project should be stored at the root of the project folder:
+Project-specific instructions are stored in the `project-instructions` folder:
 
 ```
-/reviews/[PROJECT NAME]/more_mr_info.md
+/project-instructions/[PROJECT NAME].md
 ```
 
 ## Usage

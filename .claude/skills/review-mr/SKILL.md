@@ -132,7 +132,7 @@ Not all focus areas apply to every review. A CSS fix doesn't need security analy
 - Reduce noise - don't nitpick on style if it matches existing codebase patterns
 - Be constructive - provide solutions, not just problems
 - Omit sections that don't apply (e.g., no Security Concerns section for a README change)
-- Check for `more_mr_info.md` in the project folder for project-specific guidelines
+- Check for `project-instructions/[PROJECT].md` for project-specific guidelines
 - You can add more to the code review 
 - If there are no issues found with a file, not need to add an issues section for it and mark it as skipped in the table
 - Please ensure you get guidance from CLAUDE.md and reviewing.md
