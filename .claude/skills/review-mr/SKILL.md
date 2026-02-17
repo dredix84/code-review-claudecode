@@ -21,9 +21,16 @@ Review the GitLab merge request at: $ARGUMENTS
 2. **Create Directory** - Create `reviews/[PROJECT]/[MR_ID]/` if it doesn't exist
 3. **Check Existing Reviews** - Find existing `review-notes-*.md` files and determine next increment
 4. **Fetch MR Data** - Use GitLab MCP tools to get MR details and diff
-5. **Analyze Diff** - Focus review on the diff, not the entire file.
-6. **Analyze Supporting Files** - If needed, use the codebase to get better overall understanding to provide better feedbacks
-**Write Review Notes** - Create `review-notes-[n].md` with findings
+5. **CRITICAL: Update Codebase** - Before analyzing, ensure local codebase is on the MR's source branch with latest changes:
+   - Navigate to `codebase/[PROJECT_NAME]`
+   - Run `git fetch -p` to get all remote changes
+   - Checkout the MR's source branch (from `source_branch` field in MR data)
+   - Run `git pull` to get latest commits on that branch
+   - Return to reviews directory
+6. **Read Guidelines** - Read `reviewing.md` and `project-instructions/[PROJECT].md` (if exists) for review guidance. Use retry logic: if Read fails, wait 1 second and retry once.
+7. **Analyze Diff** - Focus review on the diff, not the entire file. Use the MCP diff, not filesystem diff.
+8. **Analyze Supporting Files** - If needed, use the codebase to get better overall understanding to provide better feedbacks
+9. **Write Review Notes** - Create `review-notes-[n].md` with findings
 
 ## Review Template
 
@@ -133,6 +140,7 @@ Not all focus areas apply to every review. A CSS fix doesn't need security analy
 - Be constructive - provide solutions, not just problems
 - Omit sections that don't apply (e.g., no Security Concerns section for a README change)
 - Check for `project-instructions/[PROJECT].md` for project-specific guidelines
-- You can add more to the code review 
+- You can add more to the code review
 - If there are no issues found with a file, not need to add an issues section for it and mark it as skipped in the table
 - Please ensure you get guidance from CLAUDE.md and reviewing.md
+- **Retry Logic**: When reading guideline files (reviewing.md, project-instructions/*.md), if the Read tool fails with "Sibling tool call errored" or similar transient errors, retry the read operation once after a brief pause. Read files sequentially, not in parallel, to avoid this issue.
