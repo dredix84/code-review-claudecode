@@ -5,10 +5,13 @@ argument-hint: <MR URL>
 allowed-tools:
   - Bash
   - Write
+  - Edit
   - Glob
   - Read
+  - Grep
   - mcp__gitlab-mcp-code-review__fetch_merge_request
   - mcp__gitlab-mcp-code-review__fetch_merge_request_diff
+  - Task
 ---
 
 # Review Merge Request
@@ -17,27 +20,43 @@ Review the GitLab merge request at: $ARGUMENTS
 
 ## Workflow
 
-1. **Parse URL** - Extract project name and MR IID from the URL
-2. **Create Directory** - Create `reviews/[PROJECT]/[MR_ID]/` if it doesn't exist
-3. **Check Existing Reviews** - Find existing `review-notes-*.md` files and determine next increment
-4. **Fetch MR Data** - Use GitLab MCP tools to get MR details and diff
-5. **CRITICAL: Update Codebase** - Before analyzing, ensure local codebase is on the MR's source branch with latest changes:
-   - Navigate to `codebase/[PROJECT_NAME]`
-   - Run `git fetch -p` to get all remote changes
-   - Checkout the MR's source branch (from `source_branch` field in MR data)
-   - Run `git pull` to get latest commits on that branch
-   - Return to reviews directory
-6. **Read Guidelines** - Read `reviewing.md` and `project-instructions/[PROJECT].md` (if exists) for review guidance. Use retry logic: if Read fails, wait 1 second and retry once.
-7. **Analyze Diff** - Focus review on the diff, not the entire file. Use the MCP diff, not filesystem diff.
-8. **Analyze Supporting Files** - If needed, use the codebase to get better overall understanding to provide better feedbacks
-9. **Write Review Notes** - Create `review-notes-[n].md` with findings
+1. **Parse & Validate URL** - Extract project name and MR IID from the URL. The URL must match the pattern `http(s)://services.conexusnuclear.org:8929/<group>/<project>/-/merge_requests/<IID>`. If the URL is missing, malformed, or doesn't match this pattern, ask the user for a valid MR URL before proceeding.
+2. **Fetch MR Data** - Use GitLab MCP tools to get MR details and diff (needed for source branch)
+3. **Run Setup Script** - Execute the setup script to automate filesystem and git operations. Detect OS and use appropriate script:
+
+   **For Windows (PowerShell):**
+   ```powershell
+   pwsh -ExecutionPolicy Bypass -File .claude/skills/review-mr/setup-review.ps1 -ProjectName <PROJECT> -MrId <MR_ID> -SourceBranch <BRANCH>
+   ```
+
+   **For Linux/macOS (Bash):**
+   ```bash
+   bash .claude/skills/review-mr/setup-review.sh <PROJECT_NAME> <MR_ID> <SOURCE_BRANCH>
+   ```
+
+   The `-GitGroup`/`GIT_GROUP` parameter defaults to `candu`. Extract the group from the MR URL (e.g., `/candu/` → `candu`) and pass it explicitly.
+
+   This script handles:
+   - Creating review directory
+   - Finding existing reviews and determining next increment
+   - Cloning the repository if the codebase directory doesn't exist
+   - Resetting dirty working tree before checkout (codebase is read-only for reviews)
+   - Fetching latest code from git
+   - Checking out the source branch
+   - Pulling latest changes
+   - Outputting `NEXT_REVIEW_NUM` and `CURRENT_COMMIT` for use in review
+
+4. **Read Guidelines** - Read `reviewing.md` and `project-instructions/[PROJECT].md` (if exists) for review guidance. Use retry logic: if Read fails, wait 1 second and retry once.
+5. **Analyze Diff** - Focus review on the diff, not the entire file. Use the MCP diff, not filesystem diff.
+6. **Analyze Supporting Files** - If needed, use the codebase to get better overall understanding to provide better feedbacks
+7. **Write Review Notes** - Create `review-notes-[n].md` with findings (use NEXT_REVIEW_NUM from script output)
 
 ## Review Template
 
 Use this structure for review notes. Sections marked as optional can be omitted if not applicable to the change being reviewed. Adapt the depth and focus based on the type of project (script, frontend, backend, config, etc.):
 
 ```markdown
-# Code Review Notes - MR ![MR_IID]
+# Code Review Notes - MR !MR_IID
 
 - **Project:** [project name]
 - **MR Title:** [title]
@@ -144,3 +163,4 @@ Not all focus areas apply to every review. A CSS fix doesn't need security analy
 - If there are no issues found with a file, not need to add an issues section for it and mark it as skipped in the table
 - Please ensure you get guidance from CLAUDE.md and reviewing.md
 - **Retry Logic**: When reading guideline files (reviewing.md, project-instructions/*.md), if the Read tool fails with "Sibling tool call errored" or similar transient errors, retry the read operation once after a brief pause. Read files sequentially, not in parallel, to avoid this issue.
+- **Large Diffs**: For MRs with more than 30 changed files, prioritize non-generated files (e.g., skip vendor, compiled, or auto-generated files). Note which files were skipped and why in the Files Changed table. For large MRs, consider using the Task tool to delegate analysis of independent file groups to sub-agents in parallel.

@@ -1,7 +1,7 @@
 # Reviewing Code
 
 1. When reviewing code and asked to post a comment to a merge/pull request, if lines affected/associated are available, please create the comment with the line position when calling the `add_merge_request_comment` function.
-1. **Important!.** Not not post comments unless instructed to do so.
+1. **Important!** Do not post comments unless instructed to do so.
 1. WHen reviewing, no need for highlighting good practices as I am looking for issues which need addressing.
 1. Do not nitpick at minor details.
 1. No silent errors.
@@ -25,3 +25,4 @@
   - A command to deactivate users: `users:deactive`
   - Import new companies: `companies:import`
 - When migrations are created, ensure the proper indexes are also applied. There is generally no need for an index if the field is a foreign key.
+- **False Positive Prevention:** Before flagging a "missing import" for a class reference, verify whether the referenced class exists in the same namespace. In PHP, classes in the same namespace (e.g., `App\Models`) can reference each other without explicit imports. Always check the codebase for the class location before reporting an issue.
