@@ -2,6 +2,41 @@
 
 This directory contains code review documentation conducted using ClaudeCode CLI.
 
+## Skills
+
+Two custom skills are available for streamlined code reviews:
+
+| Skill | Description | Usage |
+|-------|-------------|-------|
+| `/review-mr` | Review a GitLab merge request and generate structured review notes | `/review-mr <MR_URL>` |
+| `/review-status` | Track status of all MRs where you're assigned as reviewer, verify if changes address posted comments | `/review-status` or `/review-status <project-name>` |
+
+## Configuration
+
+Copy `.env.example` to `.env` and configure:
+
+```bash
+REVIEWER_ID=2              # Your GitLab user ID
+REVIEWER_USERNAME=andre.dixon
+```
+
+### Optional: glab CLI
+
+Installing [glab](https://gitlab.com/gitlab-org/cli) (GitLab CLI) improves `/review-status` performance by fetching MRs across all projects in a single query:
+
+```bash
+# Windows (winget)
+winget install glab.glab
+
+# macOS
+brew install glab
+
+# Linux
+# See https://gitlab.com/gitlab-org/cli/-/releases
+```
+
+After installation, authenticate: `glab auth login`
+
 ## Structure
 
 Reviews are organized in the following directory structure:

@@ -3,3 +3,5 @@
 .claude/settings.local.json
 .vscode/settings.json
 codebase/
+.env
+reviews-statuses/*.md
