@@ -9,6 +9,6 @@ When creating issues related to the `bms-helper` project, create them in the **b
 
 This ensures all BMS-related issues are tracked in a single location.
 
-# Related Project
-This project is the API portion of the BMS. The "bms" project is the frontend associated with this API project.
+## Related Project
+This project is the legacy and newly straped in VueJS frontend so it functions as a frontendproject for the BMS. The "bms-helper" project is the API project associated with this project.
 If you need to also look at the associated project, please check to see if there is a branch  for the associated project that matched the project you are reviewing the code for. Not all frontend changes willl have an asscoaied backend change.

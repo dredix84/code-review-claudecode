@@ -43,10 +43,10 @@ Where:
 Present the suggested session name in this format:
 
 ```
-[bms-helper MR298 - Late Timesheet Approval Notification]
+bms-helper MR298 - Late Timesheet Approval Notification
 ```
 
-Just the name in brackets - ready to copy and use as the chat session title.
+Just the plain text name - ready to copy and use as the chat session title.
 
 ## Important Notes
 

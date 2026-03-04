@@ -19,6 +19,10 @@ Before analyzing any code changes, ensure you're on the correct branch with the 
 1. WHen reviewing, no need for highlighting good practices as I am looking for issues which need addressing.
 1. Do not nitpick at minor details.
 1. No silent errors.
+1. No user specific files (like ide or dev envirnment configurartion) are to be included in the repository.
+1. Binary files (like .exe or .dll for Windows) are never to be included in the repo. This also hold true for compiles assets
+
+
 
 ### Laravel Review Checklist
 - Follows PSR-2/PSR-4 standards
