@@ -9,7 +9,7 @@ MR_ID="$2"
 SOURCE_BRANCH="$3"
 REVIEWS_DIR="${4:-.}"
 GIT_GROUP="${5:-candu}"
-CODEBASE_DIR="$(cd "$REVIEWS_DIR/../codebase/$PROJECT_NAME" 2>/dev/null && pwd)" || CODEBASE_DIR=""
+CODEBASE_DIR="$(cd "$REVIEWS_DIR/codebase/$PROJECT_NAME" 2>/dev/null && pwd)" || CODEBASE_DIR=""
 
 # Colors for output
 RED='\033[0;31m'
@@ -86,10 +86,10 @@ if [ -n "$CODEBASE_DIR" ] && [ -d "$CODEBASE_DIR" ]; then
     CURRENT_DATE=$(git log -1 --format=%ci 2>/dev/null || echo "unknown")
     log_info "Current commit: $CURRENT_COMMIT ($CURRENT_DATE)"
 else
-    log_warn "Codebase directory not found: $REVIEWS_DIR/../codebase/$PROJECT_NAME"
+    log_warn "Codebase directory not found: $REVIEWS_DIR/codebase/$PROJECT_NAME"
     log_info "Attempting to clone repository..."
     CLONE_URL="ssh://git@services.conexusnuclear.org:2224/$GIT_GROUP/$PROJECT_NAME.git"
-    CLONE_TARGET="$REVIEWS_DIR/../codebase/$PROJECT_NAME"
+    CLONE_TARGET="$REVIEWS_DIR/codebase/$PROJECT_NAME"
     if git clone "$CLONE_URL" "$CLONE_TARGET" 2>/dev/null; then
         log_info "Cloned repository successfully"
         CODEBASE_DIR="$(cd "$CLONE_TARGET" && pwd)"

@@ -1,5 +1,19 @@
 # Reviewing Code
 
+## Pre-Review Setup
+
+Before analyzing any code changes, ensure you're on the correct branch with the latest changes:
+
+1. Navigate to the project codebase: `cd codebase/[PROJECT]`
+2. Fetch latest changes from remote: `git fetch -p`
+3. Checkout the MR's source branch: `git checkout [SOURCE_BRANCH]`
+4. Pull the latest changes: `git pull`
+5. Verify you're on the correct branch: `git branch --show-current`
+
+**⚠️ Critical:** Never review code against the wrong branch. Always confirm `git branch --show-current` matches the MR's source branch before proceeding.
+
+## Review Guidelines
+
 1. When reviewing code and asked to post a comment to a merge/pull request, if lines affected/associated are available, please create the comment with the line position when calling the `add_merge_request_comment` function.
 1. **Important!** Do not post comments unless instructed to do so.
 1. WHen reviewing, no need for highlighting good practices as I am looking for issues which need addressing.

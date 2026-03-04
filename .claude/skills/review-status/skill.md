@@ -10,6 +10,7 @@ allowed-tools:
   - Grep
   - Edit
   - Agent
+  - TodoWrite
   - mcp__gitlab-mcp-code-review__get_project_merge_requests
   - mcp__gitlab-mcp-code-review__fetch_merge_request
   - mcp__gitlab-mcp-code-review__fetch_merge_request_diff
@@ -46,7 +47,36 @@ Read these values at startup using the Read tool on `.env`.
 
 ## Workflow
 
+### Progress Tracking Approach
+
+This skill uses **high-level todos** for major milestones and **printed progress** for granular updates. This provides visibility without cluttering the todo list.
+
+**Todos track:**
+- Fetching MRs from GitLab
+- Processing each MR (one todo per MR)
+- Generating report
+
+**Printed progress shows:**
+- Current MR being processed (e.g., "Processing MR 3/15: candu/bms-helper!281")
+- Comment counts and verification results
+- Status updates as each MR completes
+
 ### Phase 1: Setup and Configuration
+
+1. Initialize todos:
+   ```
+   TodoWrite: [
+     {content: "Fetch merge requests from GitLab", status: "in_progress", activeForm: "Fetching merge requests from GitLab"},
+     {content: "Process merge requests and determine status", status: "pending", activeForm: "Processing merge requests and determining status"},
+     {content: "Generate review status report", status: "pending", activeForm: "Generating review status report"}
+   ]
+   ```
+
+2. Read `.env` file to get `REVIEWER_ID` and `REVIEWER_USERNAME`
+3. Print: `⚙️  Configuration loaded: Reviewer ID=[id], Username=[username]`
+4. Ensure output directory exists: `mkdir -p reviews-statuses`
+5. Check if `glab` CLI is available: `glab version`
+6. Print: `🔧 Using [glab CLI / GitLab MCP] for fetching MRs`
 
 1. Read `.env` file to get `REVIEWER_ID` and `REVIEWER_USERNAME`
 2. Ensure output directory exists: `mkdir -p reviews-statuses`
@@ -92,7 +122,24 @@ Filter results to only MRs where:
 
 **Reconciliation Step:** After fetching all MRs, verify the total count matches expectations. If using glab, the JSON array length is the definitive count. Ensure all MRs are processed before proceeding.
 
+7. Mark first todo complete and update second:
+   ```
+   TodoWrite: [
+     {content: "Fetch merge requests from GitLab", status: "completed", activeForm: "Fetching merge requests from GitLab"},
+     {content: "Process merge requests and determine status", status: "in_progress", activeForm: "Processing merge requests and determining status"},
+     {content: "Generate review status report", status: "pending", activeForm: "Generating review status report"}
+   ]
+   ```
+
+8. Print: `✓ Found N merge request(s) assigned to you`
+
 ### Phase 3: Fetch MR Details and Comments
+
+For **each** matching MR (including those from projects not in codebase/), fetch full details including notes using GitLab MCP:
+
+For each MR, print: `📄 [N/M] Fetching details for [project]![iid] - [title]`
+
+Then call:
 
 For **each** matching MR (including those from projects not in codebase/), fetch full details including notes using GitLab MCP:
 
@@ -157,6 +204,8 @@ Before launching any verification agent, you MUST ensure you are on the correct 
 
 For each project that has MRs with "Needs Verification" status:
 
+Print: `🔍 Verifying changes for [N] MR(s) in [project]...`
+
 1. **Check if project exists in codebase:**
    - If `codebase/[PROJECT]` does NOT exist:
      - If MR has reviewer comments → Mark as **"No Local Codebase"** (verification needed but can't be done)
@@ -172,6 +221,7 @@ For each project that has MRs with "Needs Verification" status:
    ```
 
 3. **For Each MR in Project - CRITICAL STEP:**
+   Print: `   ↳ Verifying [project]![iid] ([title]) - [N] comment(s) to check`
    ```bash
    # Checkout the MR's source branch
    git checkout [SOURCE_BRANCH]
@@ -200,9 +250,9 @@ For each project that has MRs with "Needs Verification" status:
    - Return a structured report
 
 5. **Update Status Based on Verification:**
-   - All issues addressed → **Changes Implemented**
-   - Some/none addressed → **Changes Not Implemented**
-   - Agent fails or errors → **Verification Failed**
+   - All issues addressed → **Changes Implemented** — Print: `      ✓ All [N] issue(s) addressed`
+   - Some/none addressed → **Changes Not Implemented** — Print: `      ⚠ [N]/[M] issue(s) addressed`
+   - Agent fails or errors → **Verification Failed** — Print: `      ✗ Verification failed: [error message]`
 
 6. **Reset Branch After Each MR:**
    Return to the project's default branch (varies by project - check for `main`, `master`, or `develop`):
@@ -212,7 +262,18 @@ For each project that has MRs with "Needs Verification" status:
 
 ### Phase 6: Generate Report
 
-Create markdown report with current timestamp:
+1. Update todos to mark processing complete and start report generation:
+   ```
+   TodoWrite: [
+     {content: "Fetch merge requests from GitLab", status: "completed", activeForm: "Fetching merge requests from GitLab"},
+     {content: "Process merge requests and determine status", status: "completed", activeForm: "Processing merge requests and determining status"},
+     {content: "Generate review status report", status: "in_progress", activeForm: "Generating review status report"}
+   ]
+   ```
+
+2. Print: `📝 Generating review status report...`
+
+3. Create markdown report with current timestamp:
 
 **Filename format:** `reviews-statuses/Reviews-[YYYY]-[MM]-[DD]-[HHMM].md`
 
@@ -396,3 +457,14 @@ After saving, provide a brief summary to the user showing:
 - Total MRs checked
 - Breakdown by status
 - MRs requiring immediate attention
+
+4. Mark final todo complete:
+   ```
+   TodoWrite: [
+     {content: "Fetch merge requests from GitLab", status: "completed", activeForm: "Fetching merge requests from GitLab"},
+     {content: "Process merge requests and determine status", status: "completed", activeForm: "Processing merge requests and determining status"},
+     {content: "Generate review status report", status: "completed", activeForm: "Generating review status report"}
+   ]
+   ```
+
+5. Print: `✅ Review status report complete: [filename]`

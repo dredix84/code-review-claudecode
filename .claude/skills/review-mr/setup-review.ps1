@@ -56,7 +56,7 @@ if ($ExistingReviews) {
 }
 
 # Update codebase if it exists
-$CodebaseDir = Join-Path $ReviewsDir "..\codebase\$ProjectName"
+$CodebaseDir = Join-Path $ReviewsDir "codebase\$ProjectName"
 $CodebaseDir = [System.IO.Path]::GetFullPath($CodebaseDir)
 
 if (Test-Path $CodebaseDir) {
@@ -107,7 +107,7 @@ if (Test-Path $CodebaseDir) {
     Log-Warn "Codebase directory not found: $CodebaseDir"
     Log-Info "Attempting to clone repository..."
     $CloneUrl = "ssh://git@services.conexusnuclear.org:2224/$GitGroup/$ProjectName.git"
-    $CloneTarget = Join-Path $ReviewsDir "..\codebase\$ProjectName"
+    $CloneTarget = Join-Path $ReviewsDir "codebase\$ProjectName"
     $CloneTarget = [System.IO.Path]::GetFullPath($CloneTarget)
     $CloneResult = git clone $CloneUrl $CloneTarget 2>&1
     if ($LASTEXITCODE -eq 0) {

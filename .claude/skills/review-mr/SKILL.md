@@ -151,6 +151,32 @@ Adapt focus based on what's relevant to the change:
 
 Not all focus areas apply to every review. A CSS fix doesn't need security analysis. A config change doesn't need performance review.
 
+## Posting Comments to Merge Requests
+
+When instructed to create or post a comment on the merge request, use the `mcp__gitlab-mcp-code-review__add_merge_request_comment` tool with the following parameters:
+
+- `resolvable: true` - Always post comments as resolvable discussion threads. This allows the author to mark each comment as resolved when addressed, providing better tracking of review feedback.
+- `position` - Include position data when commenting on specific lines of code (requires `file_path`, `old_line` or `new_line`, and `position_type`).
+
+**Example for a general comment:**
+```
+mcp__gitlab-mcp-code-review__add_merge_request_comment
+- project_id: <project_id>
+- merge_request_iid: <mr_iid>
+- body: <comment text>
+- resolvable: true
+```
+
+**Example for a line-specific comment:**
+```
+mcp__gitlab-mcp-code-review__add_merge_request_comment
+- project_id: <project_id>
+- merge_request_iid: <mr_iid>
+- body: <comment text>
+- resolvable: true
+- position: { file_path: <path>, new_line: <line_num>, position_type: "text" }
+```
+
 ## Important Notes
 
 - Focus on the DIFF, not the entire file
