@@ -50,6 +50,7 @@ Review the GitLab merge request at: $ARGUMENTS
 5. **Analyze Diff** - Focus review on the diff, not the entire file. Use the MCP diff, not filesystem diff.
 6. **Analyze Supporting Files** - If needed, use the codebase to get better overall understanding to provide better feedbacks
 7. **Write Review Notes** - Create `review-notes-[n].md` with findings (use NEXT_REVIEW_NUM from script output)
+8. **Provide Review File Link** - Output the full path to the review file so the user can easily reference it (e.g., `reviews/[PROJECT]/[MR_ID]/review-notes-[n].md`)
 
 ## Review Template
 
@@ -68,6 +69,7 @@ Use this structure for review notes. Sections marked as optional can be omitted 
 - **Source Branch:** [source] → **Target Branch:** [target]
 - **Date Reviewed:** [current date and time]
 - **Review Model:** [model used to conduct review]
+- **Review File:** `reviews/[PROJECT]/[MR_ID]/review-notes-[n].md`
 ---
 
 ## Summary
